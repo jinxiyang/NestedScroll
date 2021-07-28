@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.yang.nestscroll.ChildRecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PagerViewHolder {
 
     public static PagerViewHolder inflate(ViewGroup container, int position){
-        RecyclerView recyclerView = new RecyclerView(container.getContext());
+        ChildRecyclerView recyclerView = new ChildRecyclerView(container.getContext());
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         recyclerView.setLayoutParams(layoutParams);
         int color = Color.GRAY;
@@ -38,10 +40,10 @@ public class PagerViewHolder {
         return new PagerViewHolder(recyclerView);
     }
 
-    private RecyclerView recyclerView;
-    
+    private ChildRecyclerView recyclerView;
+
     public PagerViewHolder(View itemView) {
-        this.recyclerView = (RecyclerView) itemView;
+        this.recyclerView = (ChildRecyclerView) itemView;
     }
 
     public View getItemView() {

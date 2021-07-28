@@ -1,12 +1,11 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
 
 android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.yang.nestedscroll"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
@@ -28,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation project(":library")
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     testImplementation 'junit:junit:4.+'
