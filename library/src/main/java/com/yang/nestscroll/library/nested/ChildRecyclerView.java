@@ -1,4 +1,4 @@
-package com.yang.nestscroll;
+package com.yang.nestscroll.library.nested;
 
 import android.content.Context;
 import android.util.AttributeSet;

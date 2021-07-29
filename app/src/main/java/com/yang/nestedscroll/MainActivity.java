@@ -1,6 +1,8 @@
 package com.yang.nestedscroll;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,5 +42,10 @@ public class MainActivity extends AppCompatActivity {
         dataList.add(itemData);
 
         return dataList;
+    }
+
+    public void navigateSecondPage(View view) {
+        Intent intent = new Intent(this, LinearLayoutActivity.class);
+        startActivity(intent);
     }
 }

@@ -3,15 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.yang.nestscroll.library.nested.ParentRecyclerView
-        android:id="@+id/recyclerView"
+    <com.yang.nestscroll.library.HeaderRecyclerView
+        android:id="@+id/headerRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="300dp"
+        android:background="#0f9" />
 
-    <Button
-        android:layout_width="100dp"
+    <com.yang.nestscroll.library.IndicatorFrameLayout
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="第二页"
-        android:onClick="navigateSecondPage"/>
+        android:background="#f5f" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

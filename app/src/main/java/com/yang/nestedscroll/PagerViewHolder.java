@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.yang.nestscroll.ChildRecyclerView;
+import com.yang.nestscroll.library.nested.ChildRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
