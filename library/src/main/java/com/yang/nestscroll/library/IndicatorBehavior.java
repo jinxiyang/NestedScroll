@@ -1,7 +1,6 @@
 package com.yang.nestscroll.library;
 
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -16,16 +15,6 @@ public class IndicatorBehavior extends CoordinatorLayout.Behavior<IndicatorFrame
 
     public void setIndicatorFrameLayout(IndicatorFrameLayout indicatorFrameLayout) {
         this.indicatorFrameLayout = indicatorFrameLayout;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(@NonNull  CoordinatorLayout parent, @NonNull  IndicatorFrameLayout child, @NonNull  MotionEvent ev) {
-        return super.onInterceptTouchEvent(parent, child, ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(@NonNull  CoordinatorLayout parent, @NonNull  IndicatorFrameLayout child, @NonNull  MotionEvent ev) {
-        return super.onTouchEvent(parent, child, ev);
     }
 
     @Override
@@ -44,6 +33,7 @@ public class IndicatorBehavior extends CoordinatorLayout.Behavior<IndicatorFrame
 
     @Override
     public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull IndicatorFrameLayout child, @NonNull View directTargetChild, @NonNull View target, int axes, int type) {
+        //可能会调用两次，一次onInterceptTouchEvent，另一次onTouchEvent
         Log.i(TAG, "onStartNestedScroll: ");
         return target instanceof HeaderRecyclerView && axes == ViewCompat.SCROLL_AXIS_VERTICAL;
     }
