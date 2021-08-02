@@ -33,6 +33,7 @@ public class IndicatorFrameLayout extends FrameLayout implements CoordinatorLayo
 
 
     private NestedScrollingChildHelper mScrollingChildHelper;
+    //当view在dispatchNestedPreScroll时，发生了滚动
     private final int[] mScrollOffset = new int[2];
     private final int[] mNestedOffsets = new int[2];
     final int[] mScrollConsumed = new int[2];
@@ -177,13 +178,19 @@ public class IndicatorFrameLayout extends FrameLayout implements CoordinatorLayo
                 int dx = mLastTouchX - x;
                 int dy = mLastTouchY - y;
 
+                //分配嵌套预滚动
                 if (dispatchNestedPreScroll(dx, dy, mScrollConsumed, mScrollOffset, ViewCompat.TYPE_TOUCH)) {
                     dx -= mScrollConsumed[0];
                     dy -= mScrollConsumed[1];
+                    //修正触摸点的坐标
                     vtev.offsetLocation(mScrollOffset[0], mScrollOffset[1]);
                     // Updated the nested offsets
                     mNestedOffsets[0] += mScrollOffset[0];
                     mNestedOffsets[1] += mScrollOffset[1];
+                }
+
+                if (!nestedScrolling){
+                    nestedScrolling = Math.abs(dy) > mTouchSlop;
                 }
 
                 if (nestedScrolling) {

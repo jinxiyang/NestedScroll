@@ -1,3 +1,4 @@
 rootProject.name = "NestedScroll"
 include ':app'
 include ':library'
+include ':myapplication'
