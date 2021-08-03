@@ -35,7 +35,7 @@ public class IndicatorBehavior extends CoordinatorLayout.Behavior<IndicatorFrame
     public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull IndicatorFrameLayout child, @NonNull View directTargetChild, @NonNull View target, int axes, int type) {
         //可能会调用两次，一次onInterceptTouchEvent，另一次onTouchEvent
         Log.i(TAG, "onStartNestedScroll: ");
-        return target instanceof HeaderRecyclerView && axes == ViewCompat.SCROLL_AXIS_VERTICAL;
+        return (axes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
     }
 
 

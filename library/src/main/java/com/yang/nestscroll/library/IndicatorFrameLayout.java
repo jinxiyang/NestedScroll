@@ -238,13 +238,10 @@ public class IndicatorFrameLayout extends FrameLayout implements CoordinatorLayo
         int unconsumedX = 0, unconsumedY = 0;
         int consumedX = 0, consumedY = 0;
 
-//        if (mAdapter != null) {
-//            scrollStep(x, y, mScrollStepConsumed);
-//            consumedX = mScrollStepConsumed[0];
-//            consumedY = mScrollStepConsumed[1];
-//            unconsumedX = x - consumedX;
-//            unconsumedY = y - consumedY;
-//        }
+        consumedY = offsetY(y);
+
+        unconsumedX = x - consumedX;
+        unconsumedY = y - consumedY;
 
         if (dispatchNestedScroll(consumedX, consumedY, unconsumedX, unconsumedY, mScrollOffset,
                 ViewCompat.TYPE_TOUCH)) {
@@ -261,7 +258,31 @@ public class IndicatorFrameLayout extends FrameLayout implements CoordinatorLayo
         if (!awakenScrollBars()) {
             invalidate();
         }
-        return consumedX != 0 || consumedY != 0;
+        return consumedY != 0;
+    }
+
+    public int offsetY(int y){
+        int offsetY = 0;
+        Log.i(TAG, "offsetY: " + y);
+//        int dy = y;
+//        if (dy > 0){
+//            //页面向上走，往下滑
+//            int bottom = this.getBottom();
+//            //页面没有滑出去
+//            if (bottom > 0){
+//                offsetY = Math.min(bottom, dy);
+//                ViewCompat.offsetTopAndBottom(this, -offsetY);
+//            }
+//        } else {
+//            //页面向下走，往上滑
+//            int top = this.getTop();
+//            if (top < 0){
+//                //页面有滑出去的部分
+//                offsetY = Math.max(top, dy);
+//                ViewCompat.offsetTopAndBottom(this, -offsetY);
+//            }
+//        }
+        return offsetY;
     }
 
     public boolean fling(int velocityX, int velocityY) {
