@@ -2,6 +2,7 @@ package com.yang.ibl.scrollrecyclerview.library
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,7 @@ class ParentRecyclerView : RecyclerView, OnParentFlingListener {
     /** true 开启滑动冲突处理*/
     var enableConflict = true
     /** 开启快速滚动parent带动child联动效果(默认false)*/
-    var enableParentChain = false
+    var enableParentChain = true
     /** 开启快速滚动child带动parent联动效果*/
     var enableChildChain = true
     /** 开启吸顶子view支持下拉刷新*/
@@ -113,7 +114,8 @@ class ParentRecyclerView : RecyclerView, OnParentFlingListener {
         childTop = top
     }
 
-    override fun onFling(childSpeed: Int) {
+    override fun onParentFling(childSpeed: Int) {
+        Log.i(TAG, "onParentFling: $isChildTop  $childSpeed")
         /** child带动parent联动效果,快速滑动事件下发给self view*/
         if(enableChildChain && isChildTop ) {
             val speed = velocityY-childSpeed
@@ -236,5 +238,9 @@ class ParentRecyclerView : RecyclerView, OnParentFlingListener {
         val cancel = MotionEvent.obtain(ev)
         cancel.action = MotionEvent.ACTION_CANCEL
         dispatchTouchEvent(cancel)
+    }
+
+    companion object{
+        const val TAG = "ParentRecyclerView"
     }
 }

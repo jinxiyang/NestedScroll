@@ -2,6 +2,7 @@ package com.yang.ibl.scrollrecyclerview.library
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
@@ -22,12 +23,13 @@ class ChildRecyclerView : RecyclerView, OnChildFlingListener {
     init {
         addOnScrollListener(object :OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                Log.i(TAG, "onScrollStateChanged: $newState")
                 /** 滚动停止且到了顶部,快速滑动事件往上给parent view*/
                 if(enableConflict && SCROLL_STATE_IDLE == newState) {
                     induceParentOfChildTopStatus()
                     val step = (System.currentTimeMillis()-draggingTime).toInt()
                     val speed = 1000*draggingY/max(1000,step)
-                    parentView?.get()?.onFling(speed)
+                    parentView?.get()?.onParentFling(speed)
                 }else if(SCROLL_STATE_DRAGGING == newState){
                     draggingY = 0
                     draggingTime = System.currentTimeMillis()
@@ -35,6 +37,7 @@ class ChildRecyclerView : RecyclerView, OnChildFlingListener {
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                Log.i(TAG, "onScrolled: $dy")
                 if(SCROLL_STATE_DRAGGING == scrollState) {
                     draggingY += dy
                 }
@@ -47,6 +50,7 @@ class ChildRecyclerView : RecyclerView, OnChildFlingListener {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        Log.i(TAG, "dispatchTouchEvent: $enableConflict")
         if(enableConflict) {
             induceParentOfChildTopStatus()
         }
@@ -61,7 +65,7 @@ class ChildRecyclerView : RecyclerView, OnChildFlingListener {
     private fun findOnParentFlingListener(): OnParentFlingListener? {
         val flingListener = parentView?.get()
         if (flingListener != null){
-            return flingListener;
+            return flingListener
         }
         var pv = parent
         while (pv != null) {
@@ -72,5 +76,9 @@ class ChildRecyclerView : RecyclerView, OnChildFlingListener {
             pv = pv.parent
         }
         return null
+    }
+
+    companion object{
+        const val TAG = "ChildRecyclerView"
     }
 }
