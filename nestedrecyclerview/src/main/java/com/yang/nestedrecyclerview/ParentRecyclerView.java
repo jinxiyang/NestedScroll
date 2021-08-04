@@ -9,7 +9,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ParentRecyclerView extends RecyclerView {
     private static final String TAG = "ParentRecyclerView";
@@ -22,10 +25,9 @@ public class ParentRecyclerView extends RecyclerView {
 
     private float lastY = 0;
 
-    private boolean canScrollVertically;
+    private AtomicBoolean mCanScrollVertically;
 
-    private OnFindChildRecyclerViewCallback mOnFindChildRecyclerViewCallback;
-
+    private ChildRecyclerView tempChildRecyclerView;
 
     public ParentRecyclerView(@NonNull Context context) {
         this(context, null);
@@ -39,7 +41,7 @@ public class ParentRecyclerView extends RecyclerView {
         super(context, attrs, defStyleAttr);
         mFlingHelper = new FlingHelper(context);
         mMaxDistance = mFlingHelper.getVelocityByDistance(UIUtils.getScreenWidth() * 4);
-        canScrollVertically = true;
+        mCanScrollVertically = new AtomicBoolean(true);
         setOverScrollMode(OVER_SCROLL_NEVER);
         initScrollListener();
     }
@@ -93,11 +95,31 @@ public class ParentRecyclerView extends RecyclerView {
         }
     }
 
+    public void initLinearLayoutManager(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                ChildRecyclerView childRecyclerView = getChildRecyclerView();
+                return mCanScrollVertically.get() || childRecyclerView == null || childRecyclerView.isScrollTop();
+            }
+        };
+        setLayoutManager(linearLayoutManager);
+    }
+
+    public void setChildRecyclerView(ChildRecyclerView childRecyclerView){
+        tempChildRecyclerView = childRecyclerView;
+    }
+
     private ChildRecyclerView getChildRecyclerView(){
-        if (mOnFindChildRecyclerViewCallback != null){
-            return mOnFindChildRecyclerViewCallback.getChildRecyclerView();
+        return tempChildRecyclerView;
+    }
+
+    public boolean isChildRecyclerViewCanScrollUp(){
+        ChildRecyclerView childRecyclerView = getChildRecyclerView();
+        if (childRecyclerView != null){
+            return !childRecyclerView.isScrollTop();
         }
-        return null;
+        return false;
     }
 
     @Override
@@ -123,14 +145,14 @@ public class ParentRecyclerView extends RecyclerView {
         if (isScrollEnd()){
             ChildRecyclerView childRecyclerView = getChildRecyclerView();
             if (childRecyclerView != null){
+                mCanScrollVertically.set(false);
                 int deltaY = (int) (lastY - y);
-                canScrollVertically = false;
                 scrollBy(0, deltaY);
             }
         }
 
         if (e.getAction() == MotionEvent.ACTION_UP){
-            canScrollVertically = true;
+            mCanScrollVertically.set(true);
         }
         lastY = y;
         return super.onTouchEvent(e);
@@ -147,14 +169,6 @@ public class ParentRecyclerView extends RecyclerView {
             mVelocityY = velocityY;
         }
         return fling;
-    }
-
-    public boolean isChildRecyclerViewCanScrollUp(){
-        ChildRecyclerView childRecyclerView = getChildRecyclerView();
-        if (childRecyclerView != null){
-            return !childRecyclerView.isScrollTop();
-        }
-        return false;
     }
 
     @Override
@@ -188,13 +202,5 @@ public class ParentRecyclerView extends RecyclerView {
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
         return true;
-    }
-
-    public void setOnFindChildRecyclerViewCallback(OnFindChildRecyclerViewCallback onFindChildRecyclerViewCallback) {
-        this.mOnFindChildRecyclerViewCallback = onFindChildRecyclerViewCallback;
-    }
-
-    public interface OnFindChildRecyclerViewCallback{
-        ChildRecyclerView getChildRecyclerView();
     }
 }

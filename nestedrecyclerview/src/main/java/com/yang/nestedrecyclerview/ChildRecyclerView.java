@@ -20,8 +20,7 @@ public class ChildRecyclerView extends RecyclerView {
     private int totalDy;
 
     private ParentRecyclerView mParentRecyclerView;
-
-
+    
     public ChildRecyclerView(@NonNull Context context) {
         this(context, null);
     }
@@ -127,5 +126,13 @@ public class ChildRecyclerView extends RecyclerView {
             parent = parent.getParent();
         }
         return mParentRecyclerView;
+    }
+    
+    public void setChildRecyclerViewForParent(){
+        ParentRecyclerView parentRecyclerView = getParentRecyclerView();
+        if (parentRecyclerView != null){
+            Log.i(TAG, "setChildRecyclerViewForParent: ");
+            parentRecyclerView.setChildRecyclerView(this);
+        }
     }
 }
